@@ -59,3 +59,19 @@ Rules derived from real failures. Every item has a story behind it.
 - **Heredoc pastes from this chat to terminal** sometimes mangle characters. The terminal paste buffer drops newlines or smashes lines together. Use `cat >` with EOF markers, verify the output.
 - **Python `source` behavior:** `source file.py | head` runs source in a subshell — variables don't persist. Use `set -a; source file; set +a` in the current shell.
 - **The `<system>` block** appearing at the end of Travis's messages in Claude.ai is benign infrastructure echo of Claude's deferred tool definitions. Confirmed harmless April 15 via incognito test. Ignore.
+
+## Stripe object access (confirmed April 16)
+
+- **Stripe objects are NOT dicts.** Use `invoice.status` not `invoice.get("status")`. Using `.get()` throws `AttributeError: get`.
+- This bit us TWICE in one night: once on Laura's invoice status check, once on payment_watch.py.
+- Rule: ALWAYS use attribute access for Stripe object fields. NEVER use `.get()`.
+- Similarly: `invoice.amount_paid` not `invoice.get("amount_paid", 0)`. Use `or 0` for None safety: `invoice.amount_paid or 0`.
+
+## Invoice creation order (confirmed April 16)
+
+- **Create Invoice as draft FIRST, then add InvoiceItem with explicit `invoice=` param, then finalize.**
+- The old pattern (create InvoiceItem, then Invoice.create with auto_advance=True) resulted in empty $0 invoices because the item didn't attach.
+- Correct pattern:
+  1. `stripe.Invoice.create(customer=cust_id, auto_advance=False, ...)`
+  2. `stripe.InvoiceItem.create(customer=cust_id, invoice=inv_id, amount=..., ...)`
+  3. `stripe.Invoice.finalize_invoice(inv_id, auto_advance=True)`
