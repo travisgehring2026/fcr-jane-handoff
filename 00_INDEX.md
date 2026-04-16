@@ -25,7 +25,7 @@
 
 ## Current status snapshot
 
-- **Phase 0 (Jane reliability):** 7 of 9 lifecycle stages built + tested. STEWARD is the last stage to build. PROVISION is skipped for Repair-Helper.
+- **Phase 0 (Jane reliability):** 9 of 9 lifecycle stages built + tested. ALL STAGES COMPLETE. PROVISION is skipped for Repair-Helper.
 - **Stages proven:** SIGNAL, QUALIFY, CONTRACT, INVOICE, PAYMENT_WATCH, DELIVER, ACTIVATE
 - **LeadGate:** PAUSED — outreach suspended pending Phase 0 proof
 - **Laura Moser:** CLOSED — $175 paid, $175 auto-bills April 28, package delivered
