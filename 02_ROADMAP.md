@@ -1,7 +1,9 @@
 # FCR / Jane — Roadmap
 
-**Last updated:** April 17, 2026 ~3am UTC (April 16 ~8pm PT)
+**Last updated:** April 17, 2026
 **Principle:** Revenue-generating work first. Infrastructure supports revenue.
+
+---
 
 ## Phase Status
 
@@ -18,117 +20,122 @@
 
 ---
 
+## Retired Systems
+
+| System | Status | Replaced By |
+|---|---|---|
+| Discord Repair-Helper Bot | DEAD — killed, masked, file renamed .RETIRED | Repair-Helper V2 SaaS dashboard |
+| Claude Bridge (gmail drafts) | DEAD — killed, file renamed .RETIRED | WhatsApp commands to Jane + Claude Code direct VPS access |
+
+---
+
 ## Repair-Helper V2 SaaS — LIVE ✅
 
 ### What It Is
 Hosted AI diagnostic assistant for repair shops. No code exposed. Customers log into a web dashboard, ask diagnostic questions, get structured responses powered by Claude. FCR runs everything on our VPS using our Anthropic API key. Kill switch = disable login.
 
 ### URLs
-- **Marketing:** tryleadgate.com/repair-helper.html
-- **Login:** tryleadgate.com/rh/login
-- **Dashboard:** tryleadgate.com/rh/dashboard
-- **Admin:** tryleadgate.com/rh/admin (Travis only — no UI link for other users)
-- **Forgot Password:** tryleadgate.com/rh/forgot-password
-- **Stripe Webhook:** tryleadgate.com/api/rh-stripe-webhook
+- Marketing: tryleadgate.com/repair-helper.html
+- Login: tryleadgate.com/rh/login
+- Dashboard: tryleadgate.com/rh/dashboard
+- Admin: tryleadgate.com/rh/admin (Travis only — no UI link for other users)
+- Forgot Password: tryleadgate.com/rh/forgot-password
+- Stripe Webhook: tryleadgate.com/api/rh-stripe-webhook
 
 ### Pricing
-- **Starter:** $39.99/mo — 500 conversations, up to 3 tech logins
-- **Pro:** $79.99/mo — 1,000 conversations, unlimited logins
+- Starter: $39.99/mo — 500 conversations, up to 3 tech logins
+- Pro: $79.99/mo — 1,000 conversations, unlimited logins
 - No setup fee. Cancel anytime.
 - V1 ($500 code package) RETIRED. Laura grandfathered at $175/mo.
 
-### API Cost Per Customer
-- ~$0.016/query with Haiku (simple), ~$0.03/query with Sonnet (complex/images)
+### Margins
+- ~$0.016/query Haiku, ~$0.03/query Sonnet (images/complex)
 - 70/30 Haiku/Sonnet smart routing
 - Average shop (550 queries/mo): ~$8.80/mo API cost
-- **Margin: 78-92% at $39.99/mo**
+- Margin: 78-92% at $39.99/mo
 
-### Features — ALL VERIFIED IN BROWSER
+### Features — ALL BROWSER-VERIFIED
 1. Login/logout with team member support
 2. Diagnostic chat with structured output (confidence %, parts, customer scripts)
 3. Conversation history sidebar with search box
 4. Image upload (camera icon → Claude Sonnet vision)
 5. Knowledge base (44 cases seeded from Discord, auto-collecting)
 6. Resolution tracking ("that fixed it" → saves confirmed fix)
-7. Upgrade modal at conversation limit (one-click to Stripe Pro checkout)
+7. Upgrade modal at conversation limit → one-click Stripe Pro checkout
 8. Self-service password reset (/rh/forgot-password)
-9. Admin panel with cost tracking (Yesterday/MTD/YTD + per-shop breakdown)
+9. Admin panel with API cost tracking (Yesterday/MTD/YTD + per-shop)
 10. Kill switches in admin (Revoke/Activate per shop)
 11. Welcome email (approved professional template from Jane)
 12. Auto-suspension on Stripe cancellation (TESTED — login blocked immediately)
+13. Forgot password link on login page
+14. Mobile responsive (sidebar hides on mobile)
 
 ### Stripe
 - Product: prod_ULhuwngmDetHAu
 - Starter: price_1TN0V0ImCdFEvPjeKMufuAmj ($39.99/mo)
 - Pro: price_1TN0V1ImCdFEvPjerJcSukaO ($79.99/mo)
-- Webhook: whsec_ivmv... → tryleadgate.com/api/rh-stripe-webhook
+- Webhook secret: STRIPE_RH_WEBHOOK_SECRET in /root/fcr.env
 - Events: checkout.session.completed, customer.subscription.deleted, invoice.payment_failed
 
 ### Signup Flow (Fully Automated)
 1. Customer fills form at marketing page
 2. POST /api/repair-helper-signup → creates inactive account + Stripe checkout
 3. Customer redirected to Stripe → pays $39.99/mo
-4. Stripe webhook fires → account activated → credentials email sent
+4. Stripe webhook fires → account activated → credentials email sent from Jane
 5. Customer logs in → forced password change → starts diagnosing
 6. Cancel in Stripe → webhook fires → account deactivated → login blocked
+7. WhatsApp alerts to Travis at every step
 
 ### FCR Master Account
 - travis@fourcornersrepair.com (admin, unlimited, password: Repairman1!)
 - will@fourcornersrepair.com (technician, unlimited)
 - jonathan@fourcornersrepair.com (store manager, unlimited)
-- Discord repair-helper bot: OFFLINE (systemd stopped + disabled)
-- Welcome emails sent to all 3 from Jane
 
 ### Knowledge Base
 - 44 cases seeded from Discord history
-- Device breakdown: ps5(6), iphone(5), ipad(5), windows(4), dell(4), laptop(3), xbox(2), macbook(1), others
+- Devices: ps5(6), iphone(5), ipad(5), windows(4), dell(4), laptop(3), xbox(2), macbook(1), others
 - Every diagnostic logged (resolved or not)
 - Resolution tracking: tech says "that fixed it" → case marked resolved
 - Similar cases pulled as context before every Claude query
 - Grows smarter with every shop, every diagnostic
 
 ### Architecture
-- Backend: /root/leadgate/repair_helper_v2/ (auth.py, accounts.py, diagnose.py, knowledge.py, routes.py)
-- Templates: /root/leadgate/repair_helper_v2/templates/ (login, dashboard, settings, welcome, forgot_password, admin)
-- Data: /root/leadgate/rh_data/shops/{slug}/ (per-shop accounts, conversations, logins)
-- Knowledge: /root/leadgate/rh_data/knowledge/cases/{device}/ (anonymized cases)
+- Backend: /root/leadgate/repair_helper_v2/ (auth, accounts, diagnose, knowledge, routes)
+- Templates: /root/leadgate/repair_helper_v2/templates/
+- Data: /root/leadgate/rh_data/shops/{slug}/
+- Knowledge: /root/leadgate/rh_data/knowledge/cases/{device}/
 - Cost log: /root/leadgate/rh_data/cost_log.json
-- Flask blueprint registered in /root/leadgate/app.py
-- Caddy: tryleadgate.com → reverse_proxy 127.0.0.1:5050 (CHANGED from 18789 openclaw gateway)
+- Caddy: tryleadgate.com → reverse_proxy 127.0.0.1:5050
 
-### Critical Infrastructure Note
-- Caddy config changed April 17: now proxies directly to Flask on 5050, bypassing openclaw gateway on 18789
-- The openclaw gateway was serving cached/stale HTML — all dashboard features were invisible through it
-- If Caddy config is ever reverted to 18789, the dashboard will appear to lose features
-- Flask app.py uses dotenv to load /root/fcr.env (Stripe keys, API keys, webhook secret)
+### ⚠️ Critical Notes
+- Caddy proxies to Flask on port 5050 (NOT 18789 openclaw gateway)
+- If Caddy reverts to 18789, dashboard features will appear missing
+- Flask uses dotenv to load /root/fcr.env (all API keys, Stripe secrets)
+- Session cookies: SameSite=Lax, HttpOnly=True, Secure=False (Caddy handles HTTPS)
 
 ---
 
 ## LeadGate Outreach — DEPLOYED ✅
 
-### Configuration
-- **Verticals:** HVAC, Plumbing, Auto, Vet (4 active only)
-- **Locations:** Boise, Meridian, Nampa, Eagle, Caldwell, Star, Kuna, Garden City
-- **Daily limit:** 200 emails
-- **Suppression:** 21 days
-- **Cron:** Daily at 4pm UTC (10am Mountain)
-- **API budget:** $175/mo max (out of $200 free credit)
-- **Prospects:** 530 discovered (134 in active verticals)
-
-### Files
+- Verticals: HVAC, Plumbing, Auto, Vet (4 active only)
+- Locations: Boise, Meridian, Nampa, Eagle, Caldwell, Star, Kuna, Garden City
+- Daily limit: 200 emails
+- Suppression: 21 days
+- Cron: Daily at 4pm UTC (10am Mountain)
+- API budget: $175/mo max
+- Prospects: 530 discovered (134 in active verticals)
 - Worker: /root/jane-workers/leadgate_outreach_worker.py
-- Cache: /root/jane-workers/logs/leadgate_prospects_cache.json
-- Suppression: /root/jane-workers/logs/leadgate_outreach_suppression.json
+- First batch fires April 17
 
 ---
 
 ## POM Campaign — EXECUTED ✅
 
 - 235 HTML emails sent April 16, 0 errors
-- Professional HTML template with POM flyer PDF attached
+- Professional template with POM flyer PDF attached
 - Subject: "Your local repair shop now offers something Norton can't"
 - Hours: Mon-Sat 10am-6pm, Sun 12pm-6pm
-- pom_worker.py: 5/day rolling, 90-day schedule
+- Rolling: 5/day, 90-day schedule via pom_worker.py
 
 ---
 
@@ -145,11 +152,32 @@ Hosted AI diagnostic assistant for repair shops. No code exposed. Customers log 
 
 - Build own Facebook/Instagram/TikTok integrations
 - Spec: 10_SOCIAL_MEDIA_SPEC.md
-- **Prerequisite:** Travis creates Business accounts + gets API credentials
+- Prerequisite: Travis creates Business accounts + gets API credentials
 
 ---
 
-## Upcoming
+## Active Cron Jobs
+
+| Schedule | Job | Purpose |
+|---|---|---|
+| */2 * * * * | lifecycle/engine.py | Lifecycle stage processing |
+| 0 16 * * * | leadgate_outreach_worker.py | LeadGate outreach (10am MT) |
+| 0 15 * * * | repairdesk_worker.py | RepairDesk data sync |
+| (rolling) | pom_worker.py | POM email campaign (5/day) |
+
+---
+
+## Active Services
+
+| Service | Port | Purpose |
+|---|---|---|
+| Flask (app.py) | 5050 | LeadGate + Repair-Helper V2 |
+| Caddy | 443 | HTTPS → 5050 proxy |
+| OpenClaw Gateway | 18789 | Legacy — NOT used for tryleadgate.com anymore |
+
+---
+
+## Upcoming Dates
 
 | Date | Item |
 |---|---|
@@ -169,3 +197,5 @@ Hosted AI diagnostic assistant for repair shops. No code exposed. Customers log 
 - Apple Notes for handoff (deprecated — GitHub is source of truth)
 - Repair-Helper V1 code sales (retired)
 - Etsy (deferred — 60+ days clean bridge first)
+- Claude Bridge (retired — WhatsApp + Claude Code replaced it)
+- Discord Repair-Helper Bot (retired — V2 SaaS replaced it)

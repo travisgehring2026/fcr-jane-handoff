@@ -47,7 +47,7 @@ The bridge lets Jane (OpenClaw) dispatch tasks to Claude for execution. Architec
 - WhatsApp alerts on failures via `/home/openclaw/.openclaw/workspace/whatsapp_queue.json`
 
 **Key files:**
-- `/root/jane-workers/claude_bridge.py` — the bridge itself
+- `/root/jane-workers/claude_bridge.py.RETIRED (DISABLED)` — the bridge itself
 - `/root/jane-workers/queue_flush.py` — WhatsApp-to-email bridge (cron */5)
 - `/root/jane-workers/self_healer.py` — health monitoring (cron */30)
 
