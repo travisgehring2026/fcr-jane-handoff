@@ -1,157 +1,132 @@
-# FCR / Jane Roadmap v2
+# FCR / Jane — Roadmap
 
-**Last updated:** April 16, 2026 ~4am UTC
-**Reordered by Travis April 15.** Etsy DEFERRED. Jane reliability is Phase 0.
+**Last updated:** April 16, 2026 ~9pm PT
+**Principle:** Revenue-generating work first. Infrastructure supports revenue.
 
-## Phase Order
+## Phase Status
 
-| Phase | Name | Status | Gate |
-|---|---|---|---|
-| 0 | Jane Reliability (UCL) | 9/9 stages built | None |
-| 1 | LeadGate Resume | PAUSED | Phase 0 cron tests pass |
-| 2 | FCR Intelligence + Social Media | NOT STARTED | Phase 1 active |
-| 3 | Accounting | NOT STARTED | Phase 2 complete |
-| 4 | Etsy Passive Income | DEFERRED | 60+ days clean bridge + LeadGate 3 clients |
-| 5 | LocalIQ Launch | NOT STARTED | LeadGate 3 paying clients |
-
-## QUICK WIN: Peace of Mind Email Campaign (independent of phases)
-
-**Priority: HIGH — do this next week. Revenue sitting on the table.**
-
-One-time email blast to FCR's FULL RepairDesk customer database promoting the Peace of Mind Plan. Currently Jane only emails customers from the last 90 days. Years of PC repair customers have never heard about POM.
-
-Target: All PC repair customers who authorized email and have not opted out. Exclude business accounts.
-
-Email approach:
-- Straightforward but whimsy and eye-catching
-- Why POM is better than Norton, McAfee, etc.
-- Emphasize: local repair shop you already know and trust
-- What the Peace of Mind Plan includes and pricing
-- Attach the POM flyer (PDF)
-- One-time send only — suppress so nobody gets it twice
-- Track recipients, never re-send
-
-Technical approach:
-- Extract email list from RepairDesk API (filter: PC repairs, authorized email, not opted out, not business)
-- If list is under 500: send via Gmail over 1-2 days
-- If list is 500-5000: send in batches of 200-300/day over 1-2 weeks
-- If list is 5000+: consider free-tier transactional email service (SendGrid gives 100/day free)
-- Record every sent email in a suppression list so campaign never re-fires
-- Jane handles the batching and scheduling automatically
-
-Prerequisites:
-- RepairDesk API access to pull customer list with email + repair type + opt-in status
-- POM flyer PDF uploaded to /root/jane-workers/deliverables/
-- Email copy drafted and approved by Travis
-- Determine list size to pick sending approach
-
-Build estimate: 1 session (2-3 hours). Most of that is email copy + RepairDesk API integration.
-
-## Phase 0 — Jane Reliability (9/9 STAGES BUILT)
-
-ALL 9 LIFECYCLE STAGES BUILT AND TESTED.
-
-Remaining to declare Phase 0 PROVEN:
-1. Add engine to cron (every 2 min)
-2. Clean up test customer, inject 3 fresh test customers
-3. Let cron process all 3 end-to-end without manual intervention
-4. Declare Phase 0 foundation proven
-5. Unblock LeadGate
-
-## Phase 1 — LeadGate Resume
-
-Outreach PAUSED April 15. Cron backup at /tmp/cron.bak.20260415.
-
-After Phase 0 cron tests:
-- Get Started onboarding pipeline live
-- Add leadgate_subscription.json product config to lifecycle engine
-- Widget payment flow verified end-to-end
-- Resume outreach worker (5/day to Boise)
-- First paying client
-- Three paying Boise clients = unlocks LocalIQ + starts Etsy clock
-
-## Phase 2 — FCR Intelligence + Social Media (EXPANDED)
-
-### Workstream A: FCR Intelligence
-- Closed-loop SEO/Ads/Search Console
-- Blog reads Search Console for content ideas
-- Revenue Intelligence with Claude review
-- /repair-helper/ page rebuild
-- Widget GA4 event tracking
-- Link GA4 to Google Ads
-
-### Workstream B: Social Media Marketing (build our own, no Composio)
-
-Decision (Travis April 16): Build own Facebook/Instagram/TikTok integrations. No third-party fees. Full IP ownership. Reusable for LocalIQ.
-
-Libraries to build:
-- lib/instagram.py — Meta Graph API (photos, stories, reels, insights)
-- lib/facebook.py — Meta Graph API (page posts, comments, review shares)
-- lib/tiktok.py — TikTok API (video uploads, analytics)
-
-Content pipeline: Jane generates -> Travis approves (email) -> Jane publishes
-After 3 weeks of approved posts, Jane posts autonomously
-
-Prerequisites (Travis does): Create Business accounts for Facebook, Instagram, TikTok. Get API credentials. Store in /root/fcr.env.
-
-Build estimate: 8-10 hours across 2-3 sessions
-Full spec: see 10_SOCIAL_MEDIA_SPEC.md
-
-## Phase 3 — Accounting (NEW)
-
-- Define data flows (RepairDesk, Stripe, QBD, GBP)
-- Automate reconciliation
-- Single source of truth dashboard
-- Tax-readiness automation
-- NOT migrating QuickBooks Desktop to QBO
-
-## Phase 4 — Etsy Passive Income (DEFERRED)
-
-Bar: LeadGate 3+ clients + 60 days clean bridge.
-
-## Phase 5 — LocalIQ Launch
-
-Gated on LeadGate 3 paying clients.
-- White-label digital presence management
-- $29.99 audit / $49.99/month / bundle = $128.99
-- NOW INCLUDES social media management (reuses FCR's own integrations)
-- Target: 50 Boise clients = $2,500/mo recurring
-
-## Grants (parallel track)
-
-- NSF SBIR Phase I — $275k — JUNE 4 DEADLINE
-- Verizon Digital Ready — $10k — complete 2 free courses
-- Elevate Idaho: tmcknight@rediconnects.org
-
-## Revenue Ladder
-
-| Stream | Status | Potential |
+| Phase | Status | Revenue impact |
 |---|---|---|
-| FCR shop revenue | LIVE | $22-24k/mo |
-| Peace of Mind (expanded blast) | QUICK WIN — next week | $149.99-249.99/yr per signup |
-| Repair-Helper (Laura) | CLOSED | $350 one-time |
-| Repair-Helper (standard) | Ready to sell | $500/each |
-| Repair-Helper referrals | Waiting on Laura | $500/each |
-| LeadGate clients | PAUSED | $278/mo per client |
-| LocalIQ clients (incl social) | Not built | $50-129/mo per client |
-| NSF SBIR grant | June 4 deadline | $275k one-time |
-| Verizon Digital Ready | Courses needed | $10k one-time |
-| Etsy passive | Deferred | $50-500/mo |
+| 0: Jane Reliability (UCL) | PROVEN | Foundation for all product sales |
+| Quick Win: POM Campaign | EXECUTED | 235 emails sent, monitoring replies |
+| 1: LeadGate Resume | DEPLOYED | Outreach worker live, cron daily 10am MT |
+| 2a: Repair-Helper V2 SaaS | LIVE | $39.99-79.99/mo recurring per customer |
+| 2b: Social Media | SPEC COMPLETE | Marketing channel for all products |
+| 3: Accounting | NOT STARTED | QuickBooks automation |
+| 4: Etsy | DEFERRED | Passive income (60+ days clean bridge first) |
+| 5: LocalIQ | NOT STARTED | National expansion |
 
-## NOT NOW List
+## Repair-Helper V2 SaaS — LIVE
 
-- No new product ideas (5 phases + quick wins is enough)
-- No QBO migration
-- No Composio or third-party integration middlemen (build our own)
-- No custom CRM/analytics
-- No LeadGate scale until 3 paying Boise clients
-- No Jane financial ops until Phase 0 cron tests pass
-- No touching VPS dead PHP files
+### What it is
+Hosted AI diagnostic assistant for repair shops. No code exposed. Customers log into a web dashboard, ask diagnostic questions, get structured responses powered by Claude. We run everything on our VPS using our Anthropic key.
 
-## Key dates
+### URLs
+- Marketing: tryleadgate.com/repair-helper.html
+- Login: tryleadgate.com/rh/login
+- Dashboard: tryleadgate.com/rh/dashboard
+- Admin: tryleadgate.com/rh/admin (Travis only, no UI link)
+- Stripe webhook: tryleadgate.com/api/rh-stripe-webhook
 
-- This week: POM email campaign draft + list extraction
-- April 22: Bridge midpoint review + Laura check-in email
-- April 28: Verify Laura Invoice 2 auto-billed and paid
-- May 15: Target for Phase 0 complete + LeadGate resume
+### Pricing
+- Starter: $39.99/mo — 500 conversations, up to 3 tech logins
+- Pro: $79.99/mo — 1,000 conversations, unlimited logins
+- No setup fee. Cancel anytime.
+- V1 ($500 code package) RETIRED. Laura grandfathered.
+
+### API Cost Per Customer
+- ~$0.016/query with 70/30 Haiku/Sonnet smart routing
+- Average shop (550 queries/mo): $8.80/mo API cost
+- Margin: 78-92% at $39.99/mo
+
+### Architecture
+- Backend: /root/leadgate/repair_helper_v2/ (auth.py, accounts.py, diagnose.py, knowledge.py, routes.py)
+- Templates: /root/leadgate/repair_helper_v2/templates/ (login, dashboard, settings, welcome, admin)
+- Shop data: /root/leadgate/rh_data/shops/{slug}/
+- Knowledge base: /root/leadgate/rh_data/knowledge/cases/ (44 cases seeded from Discord)
+- Stripe: prod_ULhuwngmDetHAu, prices price_1TN0V0ImCdFEvPjeKMufuAmj (starter), price_1TN0V1ImCdFEvPjerJcSukaO (pro)
+- Webhook secret: STRIPE_RH_WEBHOOK_SECRET in /root/fcr.env
+
+### Kill Switch
+- Login IS the kill switch. Disable account = instant cutoff.
+- Admin panel at /rh/admin — Revoke/Activate buttons per shop.
+- Stripe cancellation webhook auto-revokes access.
+- No code exposed. No API keys for customer to manage.
+
+### FCR Master Account
+- travis@fourcornersrepair.com (admin, unlimited)
+- will@fourcornersrepair.com (technician, unlimited)
+- jonathan@fourcornersrepair.com (store manager, unlimited)
+- Discord repair-helper bot: OFFLINE (systemd disabled)
+
+### Knowledge Base
+- 44 cases seeded from Discord history
+- Every diagnostic logged (resolved or not)
+- Resolution tracking: tech says "that fixed it" → case marked resolved
+- Similar cases pulled as context for future queries
+- Grows smarter with every shop, every diagnostic
+
+### Customer Flow (Fully Automated)
+1. Customer visits tryleadgate.com/repair-helper.html
+2. Fills out signup form
+3. Jane sends Stripe checkout link ($39.99/mo)
+4. Customer pays → Stripe webhook fires
+5. Jane auto-creates account (email + random password)
+6. Credentials emailed to customer
+7. Customer logs in, forced password change
+8. Uses diagnostic tool (500 conversations/month)
+9. Hit limit → upgrade prompt to Pro ($79.99/mo)
+10. Cancel Stripe → Jane revokes access immediately
+
+## LeadGate Outreach — DEPLOYED
+
+### Configuration
+- Verticals: HVAC, Plumbing, Auto, Vet (4 active only)
+- Locations: Boise, Meridian, Nampa, Eagle, Caldwell, Star, Kuna, Garden City
+- Daily limit: 200 emails
+- Suppression: 21 days
+- Cron: Daily at 4pm UTC (10am Mountain)
+- API budget: $175/mo max (out of $200 free credit)
+- Prospects discovered: 530 valid emails (134 in active verticals)
+
+### Files
+- Worker: /root/jane-workers/leadgate_outreach_worker.py
+- Cache: /root/jane-workers/logs/leadgate_prospects_cache.json
+- Suppression: /root/jane-workers/logs/leadgate_outreach_suppression.json
+
+## POM Campaign — EXECUTED
+
+- 235 HTML emails sent April 16, 0 errors
+- Professional HTML template with POM flyer PDF attached
+- Subject: "Your local repair shop now offers something Norton can't"
+- Suppression list: 251 entries
+- pom_worker.py reverted to 5/day, 90-day rolling schedule
+- Hours: Mon-Sat 10am-6pm, Sun 12pm-6pm
+
+## Social Media — SPEC COMPLETE (Phase 2b)
+
+- Build own Facebook/Instagram/TikTok integrations (no Composio)
+- Spec: 10_SOCIAL_MEDIA_SPEC.md
+- Prerequisite: Travis creates Business accounts + gets API credentials
+
+## Laura Moser — CLOSED
+
+- Invoice 1: $175 PAID
+- Invoice 2: $175 auto-bills April 28
+- V1 code package delivered. Grandfathered.
+- Upgrade offer when V2 has 5+ customers.
+
+## NOT NOW
+
+- Game console add-on pricing
+- NSD school district
+- Composio (rejected)
+- Apple Notes for handoff (deprecated)
+- Repair-Helper V1 code sales (retired)
+
+## Key Dates
+
+- April 17: LeadGate outreach first batch (cron)
+- April 22: Bridge midpoint review
+- April 28: Laura Invoice 2 auto-bill
 - June 4: NSF SBIR submission deadline
