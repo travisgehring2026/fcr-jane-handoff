@@ -32,7 +32,7 @@
 - **POM Email Campaign:** EXECUTED — 235 emails sent April 16, 0 errors. Suppression list at 251. pom_worker.py reverted to normal 5/day rolling schedule.
 - **LeadGate:** DEPLOYED — outreach worker live, cron fires daily 10am MT, 4 verticals (HVAC/Plumbing/Auto/Vet), 134 prospects cached
 - **Laura Moser:** CLOSED — $175 paid, $175 auto-bills April 28, package delivered
-- **Repair-Helper V2 SaaS:** IN PROGRESS — $39.99/mo hosted platform, marketing page live, V1 retired
+- **Repair-Helper V2 SaaS:** LIVE — Full SaaS platform deployed. Login, dashboard, diagnostic AI, knowledge base (44 cases), admin panel, Stripe subscriptions, webhook, kill switches. V1 retired. Discord bot offline.
 - **Etsy:** DEFERRED — 60+ days clean bridge + LeadGate 3 clients first
 - **Social Media:** SPEC COMPLETE — build our own Facebook/Instagram/TikTok (Phase 2). No Composio.
 - **Bridge v2:** LIVE — crash loop fixed April 16 (stale restart task draft), 51 stale drafts cleaned
