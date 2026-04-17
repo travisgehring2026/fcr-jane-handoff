@@ -140,3 +140,30 @@ Built April 15, 2026. This is the autonomous customer-handling engine.
 - **Repair-Helper Product ID:** prod_UKzDKIBpggLiiU
 - **Live key:** in /root/fcr.env as STRIPE_SECRET_KEY
 - **Test key:** NEEDS TO BE ADDED (required for INVOICE stage development)
+
+
+---
+
+## RETIRED SYSTEMS — DO NOT RESTART
+
+| System | File | How Killed | Replaced By |
+|---|---|---|---|
+| Discord Repair-Helper Bot | repair_bot.py.RETIRED | Process killed, systemd masked, file renamed | Repair-Helper V2 SaaS |
+| Claude Bridge | claude_bridge.py.RETIRED | Process killed, file renamed | WhatsApp + Claude Code |
+
+### Why These Were Retired
+- **Discord bot:** Repair-Helper is now a SaaS product at $39.99/mo. Every shop gets their own login. The Discord bot gave it away for free.
+- **Claude Bridge:** Jane communicates via WhatsApp. Claude Code handles VPS execution directly via SSH. The bridge (polling Gmail drafts) was redundant overhead.
+
+### Self-Healer Updated
+- `repair-helper` removed from self_healer.py service watch list
+- `repair-helper` removed from repairdesk_worker.py service list
+- `repair-helper` removed from dashboard_updater.py status check
+- `clawdbot-repair` restart call neutralized
+- Self-healer now monitors: `openclaw`, `leadgate` only
+
+### Caddy Proxy Change (April 17, 2026)
+- **Old:** tryleadgate.com → reverse_proxy 127.0.0.1:18789 (openclaw gateway)
+- **New:** tryleadgate.com → reverse_proxy 127.0.0.1:5050 (Flask app directly)
+- **Reason:** openclaw gateway was caching/serving stale HTML, hiding all V2 dashboard features
+- **WARNING:** If Caddy config reverts to 18789, dashboard features will appear missing
