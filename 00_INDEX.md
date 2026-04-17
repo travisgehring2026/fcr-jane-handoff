@@ -22,6 +22,7 @@
 | 09_LESSONS_LEARNED.md | Rules, gotchas, anti-patterns from real failures |
 | 10_SOCIAL_MEDIA_SPEC.md | Social media integration spec (build our own, no Composio) |
 | 11_POM_EMAIL_CAMPAIGN.md | Peace of Mind email blast spec + results |
+| 12_REPAIR_HELPER_V2_SPEC.md | Repair-Helper V2 SaaS architecture + build plan |
 | CLAUDE_INSTRUCTIONS.md | How future Claude should use this repo |
 | sessions/ | Per-session logs (append-only) |
 
@@ -29,8 +30,9 @@
 
 - **Phase 0 (Jane reliability):** ALL 9 LIFECYCLE STAGES BUILT AND TESTED. Awaiting cron setup + 3 end-to-end cron tests to declare proven.
 - **POM Email Campaign:** EXECUTED — 235 emails sent April 16, 0 errors. Suppression list at 251. pom_worker.py reverted to normal 5/day rolling schedule.
-- **LeadGate:** PAUSED — outreach suspended pending Phase 0 cron tests
+- **LeadGate:** DEPLOYED — outreach worker live, cron fires daily 10am MT, 4 verticals (HVAC/Plumbing/Auto/Vet), 134 prospects cached
 - **Laura Moser:** CLOSED — $175 paid, $175 auto-bills April 28, package delivered
+- **Repair-Helper V2 SaaS:** IN PROGRESS — $39.99/mo hosted platform, marketing page live, V1 retired
 - **Etsy:** DEFERRED — 60+ days clean bridge + LeadGate 3 clients first
 - **Social Media:** SPEC COMPLETE — build our own Facebook/Instagram/TikTok (Phase 2). No Composio.
 - **Bridge v2:** LIVE — crash loop fixed April 16 (stale restart task draft), 51 stale drafts cleaned
